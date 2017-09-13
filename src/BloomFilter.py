@@ -1,14 +1,14 @@
-'''
+"""
 Created on Sep 13, 2017
 
 @author: sarah
-'''
+"""
 
 from bitarray import bitarray
 import mmh3
 
-class BloomFilter(set):
 
+class BloomFilter(set):
     def __init__(self, size, hash_count):
         super(BloomFilter, self).__init__()
         self.bit_array = bitarray(size)
@@ -21,8 +21,8 @@ class BloomFilter(set):
 
     def __iter__(self):
         return iter(self.bit_array)
-    
-    def BitArray(self):
+
+    def bitArray(self):
         return self.bit_array
 
     def add(self, item):
