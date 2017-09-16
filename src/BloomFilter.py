@@ -4,8 +4,9 @@ Created on Sep 13, 2017
 @author: sarah
 """
 
-from bitarray import bitarray
+
 import mmh3
+from bitarray import bitarray
 
 
 class BloomFilter(set):
@@ -19,10 +20,7 @@ class BloomFilter(set):
     def __len__(self):
         return self.size
 
-    def __iter__(self):
-        return iter(self.bit_array)
-
-    def bitArray(self):
+    def bit_array(self):
         return self.bit_array
 
     def add(self, item):
@@ -37,3 +35,7 @@ class BloomFilter(set):
             if self.bit_array[result] == 0:
                 return False
         return True
+
+    def make_bit_array(self, processed_dictionary):
+        for index, word in enumerate(processed_dictionary):
+            self.add(word[0])
