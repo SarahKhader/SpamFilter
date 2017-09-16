@@ -9,15 +9,15 @@ from sklearn.naive_bayes import MultinomialNB, GaussianNB, BernoulliNB
 def main():
     train_dir = 'train-mails'
     test_dir = 'test-mails'
-    bloom = BloomFilter.BloomFilter(30000000000, 10)
+    bloom = BloomFilter.BloomFilter(3000000, 10)
     spam = SpamFilter.SpamFilter(train_dir, test_dir, train_dir, bloom)
 
     dictionary = spam.make_dictionary()
     bloom.make_bit_array(dictionary)
     dictionary = list([i[0] for i in dictionary])
 
-    train_labels = np.zeros(4)
-    train_labels[2:4] = 1
+    train_labels = np.zeros(702)
+    train_labels[351:702] = 1
 
     spam.mail_dir = train_dir
     train_matrix = spam.extract_features(dictionary)
@@ -28,8 +28,8 @@ def main():
     spam.mail_dir = test_dir
     test_matrix = spam.extract_features(dictionary)
 
-    test_labels = np.zeros(4)
-    test_labels[2:4] = 1
+    test_labels = np.zeros(260)
+    test_labels[131:260] = 1
 
     support_vector_machine_result = support_vector_machine_model.predict(test_matrix)
     print(confusion_matrix(test_labels, support_vector_machine_result))

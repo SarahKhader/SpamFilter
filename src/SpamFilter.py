@@ -44,12 +44,12 @@ class SpamFilter(set):
                         all_words += words
         dictionary = Counter(all_words)
         processed_dictionary = self.process_email(dictionary)
-        processed_dictionary = processed_dictionary.most_common(30)
+        processed_dictionary = processed_dictionary.most_common(3000)
         return processed_dictionary
 
     def extract_features(self, dictionary):
         files = [os.path.join(self.mail_dir, fi) for fi in os.listdir(self.mail_dir)]
-        features_matrix = np.zeros((len(files), 30))
+        features_matrix = np.zeros((len(files), 3000))
         doc_id = 0;
         for fil in files:
             with open(fil) as fi:
