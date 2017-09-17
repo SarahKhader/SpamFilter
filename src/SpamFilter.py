@@ -4,13 +4,14 @@ from collections import Counter
 
 
 class SpamFilter(set):
-    def __init__(self, train_dir, test_dir, mail_dir, bloom_filter,size):
+    labels = None
+
+    def __init__(self, train_dir, test_dir, mail_dir, bloom_filter):
         super(SpamFilter, self).__init__()
         self.train_dir = train_dir
         self.test_dir = test_dir
         self.mail_dir = mail_dir
         self.bloom_filter = bloom_filter
-        self.labels = np.zeros(size)
 
     def process_email(self, dictionary):
         list_to_remove = list(dictionary)
@@ -37,16 +38,15 @@ class SpamFilter(set):
     def read_test(self):
         emails = [os.path.join(self.test_dir, f) for f in os.listdir(self.test_dir)]
         self.labels = np.zeros(260)
-        counter=0
+        counter = 0
         for mail in emails:
             if "spms" in mail:
                 self.labels[counter] = 1
-                counter = counter+1
+                counter = counter + 1
         return self.labels
 
     def make_dictionary(self):
         emails = [os.path.join(self.train_dir, f) for f in os.listdir(self.train_dir)]
-        counter=0
         all_words = []
         for mail in emails:
             with open(mail) as m:
@@ -54,16 +54,15 @@ class SpamFilter(set):
                     if i == 2:  # Body of email is only 3rd line of text file
                         words = line.split()
                         all_words += words
-            if "spms" in mail:
-                self.labels[counter] = 1
-                counter = counter+1
         dictionary = Counter(all_words)
         processed_dictionary = self.process_email(dictionary)
         processed_dictionary = processed_dictionary.most_common(3000)
         return processed_dictionary
 
-    def extract_features(self, dictionary):
+    def extract_features(self, dictionary, size):
+        self.labels = np.zeros(size)
         files = [os.path.join(self.mail_dir, fi) for fi in os.listdir(self.mail_dir)]
+        counter = 0
         features_matrix = np.zeros((len(files), 3000))
         doc_id = 0;
         for fil in files:
@@ -82,6 +81,7 @@ class SpamFilter(set):
                             else:
                                 features_matrix[doc_id, word_id] = 0
                 doc_id = doc_id + 1
+            if "spms" in fil:
+                self.labels[counter] = 1
+            counter = counter + 1
         return features_matrix
-
-
