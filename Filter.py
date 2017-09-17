@@ -19,14 +19,14 @@ def main():
     spam.mail_dir = train_dir
     train_matrix = spam.extract_features(dictionary, 702)
 
-    support_vector_machine_model = LinearSVC()
-    support_vector_machine_model.fit(train_matrix, spam.labels)
+    multinomial_model = MultinomialNB()
+    multinomial_model.fit(train_matrix, spam.labels)
 
     spam.mail_dir = test_dir
     test_matrix = spam.extract_features(dictionary, 260)
 
-    support_vector_machine_result = support_vector_machine_model.predict(test_matrix)
-    print(confusion_matrix(spam.labels, support_vector_machine_result))
+    multinomial_machine_result = multinomial_model.predict(test_matrix)
+    print(confusion_matrix(spam.labels, multinomial_machine_result))
 
 
 if __name__ == '__main__':

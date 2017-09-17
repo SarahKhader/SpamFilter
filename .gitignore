@@ -5,3 +5,4 @@
 src/__pycache__/
 test-mails-test/
 train-mails-test/
+/Test.py
