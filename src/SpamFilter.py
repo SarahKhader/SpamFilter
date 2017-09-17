@@ -35,16 +35,6 @@ class SpamFilter(set):
             item[0].replace('\'|&|#|{|}|;', '')
         return dictionary
 
-    def read_test(self):
-        emails = [os.path.join(self.test_dir, f) for f in os.listdir(self.test_dir)]
-        self.labels = np.zeros(260)
-        counter = 0
-        for mail in emails:
-            if "spms" in mail:
-                self.labels[counter] = 1
-                counter = counter + 1
-        return self.labels
-
     def make_dictionary(self):
         emails = [os.path.join(self.train_dir, f) for f in os.listdir(self.train_dir)]
         all_words = []
